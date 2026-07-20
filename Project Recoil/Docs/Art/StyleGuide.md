@@ -1,0 +1,1 @@
+Stylized colorful visuals.

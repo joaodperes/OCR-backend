@@ -1,0 +1,192 @@
+Inside AI there's: Game World; _AIAgentManager, _JumpLinks, _AISceneManager, _AISpanwer_Session_FFA, AI_BlockManager (expands to 'Cube') and _AIDifficultyManagerSetShortestYard. "AiBlockManager" doesn't seem to return anything in dnSpy. Here's the latest game log with those Debug statements: AiGameSession: Level Loaded, Doing initial setup
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+AiGameSession: Level Loaded, Joining Session
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+#### SETTING GAMETYPE :Deathmatch
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+WARNING: BC6H/BC7 texture format is not supported, decompressing texture
+
+AiSceneManager    -    Start()    AiGameSession
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+difficulty: 3
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+easy: 0
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+medium: 0
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+hard: 0
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+easyBots list = 3
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+mediumBots list = 1
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+hardBots list = 1
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+easy[0] is null = False
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+medium[0] is null = False
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+hard[0] is null = False
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+prefabs.Count: 0
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+!!!!!! Start Playing
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (FootStepsSource(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (FootStepsSource(Clone)(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (FootStepsSource(Clone)(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+[STUB] SendOpRequest: ResetAFK
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (Scope(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (Scope(Clone)(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+Only custom filters can be played. Please add a custom filter or an audioclip to the audiosource (Scope(Clone)(Clone)).
+
+ 
+
+(Filename:  Line: 623)
+
+
+
+[STUB] SendOpRequest: ResetAFK
+
+ 
+
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
