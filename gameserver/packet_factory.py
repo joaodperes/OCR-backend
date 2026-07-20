@@ -1,10 +1,15 @@
 from dataclasses import dataclass
+from uuid import UUID
 
+
+# ---------------------------------------------------------
+# Session Info
+# ---------------------------------------------------------
 
 @dataclass
 class SessionInfoPacket:
 
-    session_id: str
+    session_id: UUID
 
     session_type: int
 
@@ -20,10 +25,18 @@ class SessionInfoPacket:
 
     max_players: int
 
+    num_spectators: int
+
+    max_spectators: int
+
     allow_consumables: bool
 
     force_respawn: bool
 
+
+# ---------------------------------------------------------
+# Local Player
+# ---------------------------------------------------------
 
 @dataclass
 class CreatePlayerPacket:
@@ -44,6 +57,18 @@ class CreatePlayerPacket:
 
     look_at: tuple
 
+    avatar_loadout: dict
+
+    weapon_loadout: dict
+
+    weapon_ammo: dict
+
+    buffs: list
+
+
+# ---------------------------------------------------------
+# Remote Player
+# ---------------------------------------------------------
 
 @dataclass
 class CreateRemotePlayerPacket:
@@ -54,7 +79,7 @@ class CreateRemotePlayerPacket:
 
     account_id: str
 
-    account_name: str
+    name: str
 
     health: int
 
@@ -72,6 +97,20 @@ class CreateRemotePlayerPacket:
 
     look_at: tuple
 
+    pwn_loadout: list
+
+    buffs: list
+
+    skills: dict
+
+    avatar_loadout: dict
+
+    weapon_loadout: dict
+
+
+# ---------------------------------------------------------
+# Factory
+# ---------------------------------------------------------
 
 class PacketFactory:
 
@@ -80,7 +119,7 @@ class PacketFactory:
 
         return SessionInfoPacket(
 
-            session_id=str(session.id),
+            session_id=session.id,
 
             session_type=session.session_type,
 
@@ -90,15 +129,19 @@ class PacketFactory:
 
             variation_id=session.variation_id,
 
-            num_connections=len(session.players),
+            num_connections=session.num_connections,
 
-            num_players=len(session.players),
+            num_players=session.num_players,
 
             max_players=session.max_players,
 
+            num_spectators=session.num_spectators,
+
+            max_spectators=session.max_spectators,
+
             allow_consumables=session.allow_consumables,
 
-            force_respawn=session.force_respawn
+            force_respawn=session.force_respawn,
         )
 
     @staticmethod
@@ -118,9 +161,25 @@ class PacketFactory:
 
             current_weapon_slot=player.current_weapon_slot,
 
-            position=player.position,
+            position=(
+                player.position.x,
+                player.position.y,
+                player.position.z,
+            ),
 
-            look_at=player.look_at
+            look_at=(
+                player.look_at.x,
+                player.look_at.y,
+                player.look_at.z,
+            ),
+
+            avatar_loadout={},
+
+            weapon_loadout={},
+
+            weapon_ammo={},
+
+            buffs=[],
         )
 
     @staticmethod
@@ -128,13 +187,13 @@ class PacketFactory:
 
         return CreateRemotePlayerPacket(
 
-            timestamp=player.timestamp,
+            timestamp=0,
 
             player_id=player.player_id,
 
             account_id=str(player.account_id),
 
-            account_name=player.account_name,
+            name=player.name,
 
             health=player.health,
 
@@ -142,13 +201,31 @@ class PacketFactory:
 
             team=player.team,
 
-            flags=player.flags,
+            flags=0,
 
             current_weapon_slot=player.current_weapon_slot,
 
-            waiting_to_respawn=player.waiting_to_respawn,
+            waiting_to_respawn=False,
 
-            position=player.position,
+            position=(
+                player.position.x,
+                player.position.y,
+                player.position.z,
+            ),
 
-            look_at=player.look_at
+            look_at=(
+                player.look_at.x,
+                player.look_at.y,
+                player.look_at.z,
+            ),
+
+            pwn_loadout=[],
+
+            buffs=[],
+
+            skills={},
+
+            avatar_loadout={},
+
+            weapon_loadout={},
         )

@@ -1,32 +1,40 @@
 import threading
 import time
 
-from gameserver.session_manager import session_manager
+from .session_manager import session_manager
 
 
 class GameLoop:
 
-    TICK_RATE = 20
-    DELTA = 1.0 / TICK_RATE
-
     def start(self):
 
-        thread = threading.Thread(
-            target=self.run,
-            daemon=True
-        )
+        thread = threading.Thread(target=self.run)
+
+        thread.daemon = True
 
         thread.start()
 
     def run(self):
 
+        print("Game loop started")
+
+        previous = time.time()
+
         while True:
 
-            for session in session_manager.sessions.values():
+            now = time.time()
 
-                session.update(self.DELTA)
+            dt = now - previous
 
-            time.sleep(self.DELTA)
+            previous = now
+
+            session = session_manager.get_current()
+
+            if session is not None:
+
+                session.update(dt)
+
+            time.sleep(0.05)
 
 
 game_loop = GameLoop()

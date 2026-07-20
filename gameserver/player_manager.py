@@ -1,4 +1,4 @@
-from gameserver.player import Player
+from gameserver.entities.player_entity import PlayerEntity
 
 
 class PlayerManager:

@@ -1,102 +1,160 @@
-from gameserver.round_state import RoundState
-from gameserver.bot import Bot
-from gameserver.events import EventQueue
 import uuid
+from enum import Enum
+
+from gameserver.entities.player_entity import PlayerEntity
+from gameserver.entities.bot_entity import BotEntity
+
+
+class RoundState(Enum):
+    SETUP = 0
+    RUNNING = 1
+    FINISHED = 2
+
 
 class Session:
 
-    TARGET_POPULATION = 8
-
     def __init__(self):
 
-        self.players = {}
-
-        self.next_player_id = 1
-
-        self.round_state = RoundState.SETUP
-
-        self.server_time = 0
-
-        self.tick = 0
-
-        self.events = EventQueue()
-
+        # Unique session identifier
         self.id = uuid.uuid4()
 
-        self.map_name = "ruaturbine"
-
-        """ 	private void SetupLevelArrays()
-            {
-                this.exploreMapModeLevels = new string[11];
-                this.exploreMapModeLevels[0] = "DM-Slums";
-                this.exploreMapModeLevels[1] = "courtyard";
-                this.exploreMapModeLevels[2] = "DM-Burninator";
-                this.exploreMapModeLevels[3] = "DirtyRiver";
-                this.exploreMapModeLevels[4] = "Probetown";
-                this.exploreMapModeLevels[5] = "turbine";
-                this.exploreMapModeLevels[6] = "firstblood";
-                this.exploreMapModeLevels[7] = "IsleKillya";
-                this.exploreMapModeLevels[8] = "Graveyard";
-                this.exploreMapModeLevels[9] = "echelonjr";
-                this.exploreMapModeLevels[10] = "DM-Ceres";
-                this.annihilatorModeLevels = new string[9];
-                this.annihilatorModeLevels[0] = "DM-Slums";
-                this.annihilatorModeLevels[1] = "courtyard";
-                this.annihilatorModeLevels[2] = "DM-Burninator";
-                this.annihilatorModeLevels[3] = "DirtyRiver";
-                this.annihilatorModeLevels[4] = "Probetown";
-                this.annihilatorModeLevels[5] = "turbine";
-                this.annihilatorModeLevels[6] = "firstblood";
-                this.annihilatorModeLevels[7] = "Graveyard";
-                this.annihilatorModeLevels[8] = "echelonjr";
-                this.tdModeLevels = new string[2];
-                this.tdModeLevels[0] = "Graveyard";
-                this.tdModeLevels[1] = "DirtyRiver";
-            } 
-        """
-
+        # Session settings
+        self.session_type = 0
         self.game_type = 0
-
         self.variation_id = 0
 
-        self.session_type = 0
+        # Map
+        self.map_name = "ruaturbine"
 
+        # Player limits
         self.max_players = 8
+        self.max_spectators = 4
 
+        # Gameplay options
         self.allow_consumables = True
-
         self.force_respawn = True
 
-    def update(self, dt):
+        # Connected entities
+        self.players = {}
+        self.bots = {}
+        self.spectators = {}
 
-        self.server_time += dt
-        self.tick += 1
+        # Match state
+        self.round_state = RoundState.SETUP
 
-        self.ensure_population()
+        self.match_time = 0.0
+        self.setup_time = 10.0
 
-        for player in self.players.values():
+        # Bot settings
+        self.minimum_population = 8
+        self.next_bot_id = 1000
 
-            if isinstance(player, Bot):
-                player.update(dt)
-
-    def ensure_population(self):
-
-        while len(self.players) < self.TARGET_POPULATION:
-
-            self.add_player(Bot())
+    # ----------------------------------------------------
+    # Player Management
+    # ----------------------------------------------------
 
     def add_player(self, player):
 
-        player.player_id = self.next_player_id
-
-        self.next_player_id += 1
-
         self.players[player.player_id] = player
 
-        print(
-            f"[SESSION] Added {player.account_name} "
-            f"(PlayerId={player.player_id})"
-        )
+        print(f"[SESSION] Player joined: {player.name}")
 
+    def remove_player(self, player_id):
 
-        return player
+        if player_id in self.players:
+
+            print(f"[SESSION] Player left: {player_id}")
+
+            del self.players[player_id]
+
+    # ----------------------------------------------------
+    # Bot Management
+    # ----------------------------------------------------
+
+    def add_bot(self):
+
+        bot = BotEntity()
+
+        bot.player_id = self.next_bot_id
+        bot.name = f"Bot {bot.player_id}"
+
+        self.next_bot_id += 1
+
+        self.bots[bot.player_id] = bot
+
+        print(f"[SESSION] Added {bot.name}")
+
+        return bot
+
+    def remove_bot(self, player_id):
+
+        if player_id in self.bots:
+
+            print(f"[SESSION] Removed bot {player_id}")
+
+            del self.bots[player_id]
+
+    # ----------------------------------------------------
+    # Population
+    # ----------------------------------------------------
+
+    def ensure_population(self):
+
+        total = len(self.players) + len(self.bots)
+
+        while total < self.minimum_population:
+
+            self.add_bot()
+
+            total += 1
+
+    # ----------------------------------------------------
+    # Match Update
+    # ----------------------------------------------------
+
+    def update(self, dt):
+
+        self.match_time += dt
+
+        self.ensure_population()
+
+        if self.round_state == RoundState.SETUP:
+
+            if self.match_time >= self.setup_time:
+
+                self.round_state = RoundState.RUNNING
+
+                print("[SESSION] Match started")
+
+        elif self.round_state == RoundState.RUNNING:
+
+            for bot in self.bots.values():
+
+                bot.update(dt)
+
+    # ----------------------------------------------------
+    # Helpers
+    # ----------------------------------------------------
+
+    @property
+    def num_players(self):
+
+        return len(self.players) + len(self.bots)
+
+    @property
+    def num_connections(self):
+
+        return len(self.players)
+
+    @property
+    def num_spectators(self):
+
+        return len(self.spectators)
+
+    def get_all_players(self):
+
+        for player in self.players.values():
+            yield player
+
+        for bot in self.bots.values():
+            yield bot

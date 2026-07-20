@@ -4,6 +4,9 @@ from web import auth
 from web import servers
 from web import system
 
+from transport.router import router
+
+import json
 
 class Handler(BaseHTTPRequestHandler):
 
@@ -44,10 +47,29 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
 
         length = int(self.headers.get("Content-Length", 0))
+
         body = self.rfile.read(length)
 
-        print(self.path)
-        print(body.decode(errors="ignore"))
+        try:
+            payload = json.loads(body.decode())
+        except Exception:
+            payload = {}
+
+        result = router.dispatch(
+
+            payload.get("opcode"),
+
+            payload
+        )
 
         self.send_response(200)
+
+        self.send_header("Content-Type", "application/json")
+
         self.end_headers()
+
+        self.wfile.write(
+
+            json.dumps(result).encode()
+
+        )
